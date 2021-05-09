@@ -43,6 +43,9 @@ def validate_block_id(param,black_listed_ids):
     if not re.match(r'^[a-z|A-Z]\w*$', value):
         raise ValidateError('ID "{}" must begin with a letter and may contain letters, numbers, '
                             'and underscores.'.format(value))
+    # Epy blocks and modules are exempt from id check
+    if re.search('^epy', value):
+        return value
     if value in (black_listed_ids + ID_BLACKLIST):
         raise ValidateError('ID "{}" is blacklisted.'.format(value))
     block_names = [block.name for block in param.parent_flowgraph.iter_enabled_blocks()]
