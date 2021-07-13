@@ -107,7 +107,19 @@ int sink_impl::general_work(__GR_ATTR_UNUSED int noutput_items,
             flags |= SOAPY_SDR_END_BURST;
         }
     }
-
+    // ###############################################################################
+    // This code is for my DSO 2021 Project.
+    // This code allows me to use a "freq" stream tag to change the frequency of the HackRF.
+    // Assumes only 1 channel - channel 0. Also assumes that there is a maximum of 1 freq tag each time general_work is called. 
+    std::vector<tag_t> freq_tags;
+    get_tags_in_window(freq_tags, 0, 0, nin, pmt::mp("freq"));
+    if (freq_tags.size())
+    {
+        auto freq_tag = freq_tags[0];
+        // GR_LOG_INFO(this->d_debug_logger, boost::format("freq val: %f @ offset: %d") % pmt::to_double(freq_tag.value) % (freq_tag.offset-nitems_read(0)));
+        d_device->setFrequency(SOAPY_SDR_TX, 0, pmt::to_double(freq_tag.value)); // Chan 0 just to test out for DSO Project
+    }
+    // ##############################################################################
     int result = 0;
     if (nwrite != 0) {
         // No command handlers while writing
