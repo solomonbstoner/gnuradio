@@ -82,7 +82,7 @@ class gfsk_mod(gr.hier_block2):
 
         # Turn it into NRZ data.
         #self.nrz = digital.bytes_to_syms()
-        self.unpack = blocks.packed_to_unpacked_bb(1, gr.GR_MSB_FIRST)
+        #self.unpack = blocks.packed_to_unpacked_bb(1, gr.GR_MSB_FIRST)
         self.nrz = digital.chunks_to_symbols_bf([-1, 1])
 
         # Form Gaussian filter
@@ -111,7 +111,8 @@ class gfsk_mod(gr.hier_block2):
             self._setup_logging()
 
         # Connect & Initialize base class
-        self.connect(self, self.unpack, self.nrz, self.gaussian_filter, self.fmmod, self.amp, self)
+        # self.connect(self, self.unpack, self.nrz, self.gaussian_filter, self.fmmod, self.amp, self)
+        self.connect(self, self.nrz, self.gaussian_filter, self.fmmod, self.amp, self)
 
     def samples_per_symbol(self):
         return self._samples_per_symbol
