@@ -1,6 +1,6 @@
 id: variable_high_pass_filter_taps
 label: High-pass Filter Taps
-flags: [ show_id, python ]
+flags: [ show_id, python, cpp ]
 
 parameters:
 -   id: gain
@@ -41,7 +41,7 @@ templates:
 cpp_templates:
     includes: ['#include <gnuradio/filter/firdes.h>']
     declarations: 'filter::firdes::sptr ${id};'
-    var_make: |-
+    make: |-
         this->${id} = ${id} = firdes.high_pass(${gain}, ${samp_rate}, ${cutoff_freq},\
         ${width}, ${win}, ${beta});
     link: ['gnuradio::gnuradio-filter']
